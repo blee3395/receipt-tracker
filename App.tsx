@@ -5,45 +5,42 @@
  * @format
  */
 
+import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import React, { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
   Button,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { CameraMode } from './src/views/CameraMode';
 
 type SectionProps = PropsWithChildren<{
-  title: string;
+  title?: string;
 }>;
 
 const Section = ({ children, title }: SectionProps): React.JSX.Element => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
+      {title && (
+        <Text
+          style={[
+            styles.sectionTitle,
+            {
+              color: isDarkMode ? Colors.white : Colors.black,
+            },
+          ]}>
+          {title}
+        </Text>
+      )}
       <Text
         style={[
           styles.sectionDescription,
@@ -58,39 +55,41 @@ const Section = ({ children, title }: SectionProps): React.JSX.Element => {
 };
 
 const App = (): React.JSX.Element => {
-  const [showCamera, setShowCamera] = useState(false);
-
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const [showCamera, setShowCamera] = useState(true);
 
   const toggleCamera = () => {
     setShowCamera((prev) => !prev);
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        {showCamera ? <CameraMode /> : <Text>Camera is not active</Text>}
-
-        <Button title="Toggle Camera" onPress={toggleCamera} />
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <GestureHandlerRootView style={styles.root}>
+        <SafeAreaView style={styles.root}>
+          {showCamera ? (
+            <Section>
+              <CameraMode />
+            </Section>
+          ) : (
+            <Text>Camera is not active</Text>
+          )}
+          <View style={styles.buttonContainer}>
+            <Button title="Toggle Camera" onPress={toggleCamera} />
+          </View>
+        </SafeAreaView>
+      </GestureHandlerRootView>
+    </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
   sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+    flex: 1,
+    marginTop: 0,
+    marginBottom: 24,
+    marginHorizontal: 8,
   },
   sectionTitle: {
     fontSize: 24,
@@ -103,6 +102,13 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 20, // Position it 20px from the bottom
+    left: 0,
+    right: 0,
+    alignItems: 'center', // Centers the button horizontally
   },
 });
 

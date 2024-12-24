@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { Camera, useCameraDevices } from 'react-native-vision-camera';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
 
 export const CameraMode = () => {
   const [hasPermission, setHasPermission] = useState(false);
-  const devices = useCameraDevices();
-  const device = devices.find((d) => d.position === 'back');
+  const device = useCameraDevice('back');
 
   useEffect(() => {
     (async () => {
@@ -23,15 +22,28 @@ export const CameraMode = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
+    <View style={styles.absoluteFill}>
+      <Camera
+        style={StyleSheet.absoluteFill}
+        device={device}
+        isActive={device && hasPermission}
+        onInitialized={() => {
+          console.log('Camera Initialized...');
+        }}
+        onError={() => {
+          console.error('Error with camera...');
+        }}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  absoluteFill: {
+    flexGrow: 1,
+    aspectRatio: 16 / 9,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
