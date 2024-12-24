@@ -11,13 +11,14 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import {
-  Button,
   SafeAreaView,
   StyleSheet,
   Text,
   useColorScheme,
   View,
+  TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { CameraMode } from './src/views/CameraMode';
@@ -73,7 +74,9 @@ const App = (): React.JSX.Element => {
             <Text>Camera is not active</Text>
           )}
           <View style={styles.buttonContainer}>
-            <Button title="Toggle Camera" onPress={toggleCamera} />
+            <TouchableOpacity onPress={toggleCamera} style={styles.iconButton}>
+              <Icon name="camera" size={30} color="#fff" />
+            </TouchableOpacity>
           </View>
         </SafeAreaView>
       </GestureHandlerRootView>
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   sectionContainer: {
     flex: 1,
     marginTop: 0,
-    marginBottom: 24,
+    marginBottom: 16,
     marginHorizontal: 8,
   },
   sectionTitle: {
@@ -109,6 +112,16 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     alignItems: 'center', // Centers the button horizontally
+  },
+  iconButton: {
+    backgroundColor: '#636e7a',
+    padding: 15,
+    borderRadius: 50,
+    elevation: 5, // Adds shadow on Android
+    shadowColor: '#000', // Adds shadow on iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
 });
 
